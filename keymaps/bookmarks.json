@@ -1,19 +1,15 @@
 {
-  "atom-text-editor": {
+  // :not([mini]) because these act on the file. Reached from a find field or a
+  // commit box the handlers fall back to the active editor, so they would
+  // bookmark the file behind the dialog.
+  "atom-text-editor:not([mini])": {
     "ctrl-f2": "bookmarks:view-all",
     "f2": "bookmarks:jump-to-next-bookmark",
-    "shift-f2": "bookmarks:jump-to-previous-bookmark"
-  },
-  ".platform-darwin atom-text-editor": {
-    "cmd-f2": "bookmarks:toggle-bookmark",
-    "cmd-shift-f2": "bookmarks:clear-bookmarks"
-  },
-  ".platform-win32 atom-text-editor": {
-    "alt-ctrl-f2": "bookmarks:toggle-bookmark",
-    "ctrl-shift-f2": "bookmarks:clear-bookmarks"
-  },
-  ".platform-linux atom-text-editor": {
-    "ctrl-shift-f2": "bookmarks:toggle-bookmark",
-    "alt-shift-f2": "bookmarks:clear-bookmarks"
+    "shift-f2": "bookmarks:jump-to-previous-bookmark",
+    // One binding rather than three platform blocks. The old split was not a
+    // cmd/ctrl swap: ctrl-shift-f2 cleared every bookmark on Windows and
+    // toggled one on Linux.
+    "cmdorctrl-f2": "bookmarks:toggle-bookmark",
+    "cmdorctrl-shift-f2": "bookmarks:clear-bookmarks"
   }
 }
