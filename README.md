@@ -17,10 +17,7 @@ To install `bookmarks` search for _bookmarks_ in the Install pane of the Lumine 
 
 Commands available in `atom-workspace`:
 
-- `bookmarks:view-all`: view all bookmarks in a searchable list.
-
-Commands available in `atom-text-editor`:
-
+- `bookmarks:view-all`: view all bookmarks in a searchable list,
 - `bookmarks:toggle-bookmark`: add or remove a bookmark on the current line,
 - `bookmarks:clear-bookmarks`: remove all bookmarks in the editor,
 - `bookmarks:jump-to-next-bookmark`: move the cursor to the next bookmark,

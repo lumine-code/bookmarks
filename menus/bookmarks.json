@@ -36,10 +36,16 @@
     }
   ],
   "context-menu": {
-    "atom-text-editor": [
+    "atom-text-editor:not([mini])": [
+      {
+        "type": "separator"
+      },
       {
         "label": "Toggle bookmark",
         "command": "bookmarks:toggle-bookmark"
+      },
+      {
+        "type": "separator"
       }
     ]
   }
