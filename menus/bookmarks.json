@@ -41,7 +41,7 @@
         "type": "separator"
       },
       {
-        "label": "Toggle bookmark",
+        "label": "Toggle Bookmark",
         "command": "bookmarks:toggle-bookmark"
       },
       {
