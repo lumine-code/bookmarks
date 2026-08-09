@@ -25,7 +25,7 @@ describe("Bookmarks package", () => {
     jasmine.attachToDOM(workspaceElement);
     editor = atom.workspace.getActiveTextEditor();
     editorElement = atom.views.getView(editor);
-    spyOn(atom, "beep");
+    spyOn(atom.notifications, "beep");
   });
 
   describe("toggling bookmarks", () => {
@@ -374,11 +374,11 @@ describe("Bookmarks package", () => {
 
       atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.beep.callCount).toBe(1);
+      expect(atom.notifications.beep.callCount).toBe(1);
 
       atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.beep.callCount).toBe(2);
+      expect(atom.notifications.beep.callCount).toBe(2);
     });
 
     describe("with one bookmark", () => {
@@ -667,11 +667,11 @@ describe("Bookmarks package", () => {
 
       atom.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.beep.callCount).toBe(1);
+      expect(atom.notifications.beep.callCount).toBe(1);
 
       atom.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.beep.callCount).toBe(2);
+      expect(atom.notifications.beep.callCount).toBe(2);
     });
 
     describe("with one bookmark", () => {
