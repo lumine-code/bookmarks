@@ -6,7 +6,7 @@
   // Not a bare f2: that is Rename in every editor a user is likely to arrive
   // from, and refactor:rename binds it on this same selector, where the winner
   // is decided by load order alone. tree-view uses f2 for rename too.
-  "atom-text-editor:not([mini])": {
+  "lumine-text-editor:not([mini])": {
     "alt-f2": "bookmarks:jump-to-next-bookmark",
     "alt-shift-f2": "bookmarks:jump-to-previous-bookmark",
     "ctrl-f2": "bookmarks:toggle-bookmark",

@@ -15,7 +15,7 @@ To install `bookmarks` search for _bookmarks_ in the Install pane of the Lumine 
 
 ## Commands
 
-Commands available in `atom-workspace`:
+Commands available in `lumine-workspace`:
 
 - `bookmarks:view-all`: view all bookmarks in a searchable list,
 - `bookmarks:toggle-bookmark`: add or remove a bookmark on the current line,
@@ -34,7 +34,7 @@ Commands available in `atom-workspace`:
 Change the color of the bookmark marker in the gutter by adding CSS to your `styles.css`:
 
 ```css
-atom-text-editor .gutter .line-number.bookmarked .icon-right:before {
+lumine-text-editor .gutter .line-number.bookmarked .icon-right:before {
   color: #e5c07b;
 }
 ```

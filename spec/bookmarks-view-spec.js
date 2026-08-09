@@ -15,17 +15,17 @@ describe("Bookmarks package", () => {
 
   beforeEach(async () => {
     spyOn(window, "setImmediate").andCallFake((fn) => fn());
-    workspaceElement = atom.views.getView(atom.workspace);
+    workspaceElement = lumine.views.getView(lumine.workspace);
 
-    await atom.workspace.open("sample.js");
+    await lumine.workspace.open("sample.js");
 
-    bookmarks = (await atom.packages.activatePackage("bookmarks")).mainModule;
+    bookmarks = (await lumine.packages.activatePackage("bookmarks")).mainModule;
     provider = bookmarks.bookmarksProvider;
 
     jasmine.attachToDOM(workspaceElement);
-    editor = atom.workspace.getActiveTextEditor();
-    editorElement = atom.views.getView(editor);
-    spyOn(atom.notifications, "beep");
+    editor = lumine.workspace.getActiveTextEditor();
+    editorElement = lumine.views.getView(editor);
+    spyOn(lumine.notifications, "beep");
   });
 
   describe("toggling bookmarks", () => {
@@ -33,7 +33,7 @@ describe("Bookmarks package", () => {
       it("creates a marker when toggled", () => {
         editor.setCursorBufferPosition([3, 10]);
         expect(bookmarkedRangesForEditor(editor)).toEqual([]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
             [3, 10],
@@ -55,11 +55,11 @@ describe("Bookmarks package", () => {
         editor.setCursorBufferPosition([3, 10]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(1);
         expect(callback.callCount).toBe(1);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
         expect(callback.callCount).toBe(2);
       });
@@ -70,7 +70,7 @@ describe("Bookmarks package", () => {
         editor.setCursorBufferPosition([3, 10]);
         editor.addCursorAtBufferPosition([6, 11]);
         expect(bookmarkedRangesForEditor(editor)).toEqual([]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
             [3, 10],
@@ -89,16 +89,16 @@ describe("Bookmarks package", () => {
         editor.setCursorBufferPosition([3, 10]);
         editor.addCursorAtBufferPosition([6, 11]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(2);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
       });
 
       it("adds and removes multiple markers at the same time", () => {
         editor.setCursorBufferPosition([3, 10]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
             [3, 10],
@@ -107,7 +107,7 @@ describe("Bookmarks package", () => {
         ]);
 
         editor.addCursorAtBufferPosition([6, 11]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
             [6, 11],
@@ -117,7 +117,7 @@ describe("Bookmarks package", () => {
 
         editor.addCursorAtBufferPosition([8, 8]);
         editor.addCursorAtBufferPosition([11, 8]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
             [3, 10],
@@ -135,7 +135,7 @@ describe("Bookmarks package", () => {
 
         // reset cursors, and try multiple cursors on same line but different ranges
         editor.setCursorBufferPosition([8, 40]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
             [3, 10],
@@ -149,7 +149,7 @@ describe("Bookmarks package", () => {
 
         editor.addCursorAtBufferPosition([3, 0]);
         editor.addCursorAtBufferPosition([11, 0]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
             [8, 40],
@@ -158,7 +158,7 @@ describe("Bookmarks package", () => {
         ]);
 
         editor.setCursorBufferPosition([8, 0]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
       });
     });
@@ -173,7 +173,7 @@ describe("Bookmarks package", () => {
         ]);
         expect(bookmarkedRangesForEditor(editor)).toEqual([]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
@@ -192,10 +192,10 @@ describe("Bookmarks package", () => {
         ]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(1);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
       });
     });
@@ -210,7 +210,7 @@ describe("Bookmarks package", () => {
         ]);
         expect(bookmarkedRangesForEditor(editor)).toEqual([]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
         expect(bookmarkedRangesForEditor(editor)).toEqual([
           [
@@ -229,10 +229,10 @@ describe("Bookmarks package", () => {
         ]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(1);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
       });
 
@@ -245,11 +245,11 @@ describe("Bookmarks package", () => {
         ]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(1);
 
         editor.setCursorBufferPosition([2, 2]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
       });
 
@@ -262,11 +262,11 @@ describe("Bookmarks package", () => {
         ]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(1);
 
         editor.setCursorBufferPosition([1, 2]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
       });
 
@@ -279,11 +279,11 @@ describe("Bookmarks package", () => {
         ]);
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(1);
 
         editor.setCursorBufferPosition([3, 10]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
       });
     });
@@ -292,7 +292,7 @@ describe("Bookmarks package", () => {
       editor.setCursorBufferPosition([3, 10]);
       expect(getBookmarkedLineNodes(editorElement).length).toBe(0);
 
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       let lines = getBookmarkedLineNodes(editorElement);
 
       expect(editorElement.querySelectorAll(".highlight.bookmarked").length).toBe(0);
@@ -300,7 +300,7 @@ describe("Bookmarks package", () => {
       expect(editorElement.querySelectorAll(".line-number.bookmarked").length).toBe(1);
       expect(lines[0]).toHaveData("buffer-row", 3);
 
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
       expect(editorElement.querySelectorAll(".highlight.bookmarked").length).toBe(0);
       expect(editorElement.querySelectorAll(".line.bookmarked").length).toBe(0);
@@ -316,7 +316,7 @@ describe("Bookmarks package", () => {
       ]);
       expect(editorElement.querySelectorAll(".bookmarked").length).toBe(0);
 
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       let lines = getBookmarkedLineNodes(editorElement);
 
       expect(editorElement.querySelectorAll(".highlight.bookmarked").length).toBe(1);
@@ -324,7 +324,7 @@ describe("Bookmarks package", () => {
       expect(editorElement.querySelectorAll(".line-number.bookmarked").length).toBe(1);
       expect(lines[0]).toHaveData("buffer-row", 3);
 
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
       expect(editorElement.querySelectorAll(".highlight.bookmarked").length).toBe(0);
       expect(editorElement.querySelectorAll(".line.bookmarked").length).toBe(0);
@@ -337,14 +337,14 @@ describe("Bookmarks package", () => {
       instance.onDidChangeBookmarks(callback);
 
       editor.setCursorBufferPosition([3, 10]);
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       expect(callback.callCount).toBe(1);
 
       editor.setCursorBufferPosition([5, 0]);
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       expect(callback.callCount).toBe(2);
 
-      atom.commands.dispatch(editorElement, "bookmarks:clear-bookmarks");
+      lumine.commands.dispatch(editorElement, "bookmarks:clear-bookmarks");
       expect(getBookmarkedLineNodes(editorElement).length).toBe(0);
       expect(callback.callCount).toBe(3);
     });
@@ -358,7 +358,7 @@ describe("Bookmarks package", () => {
       editor.setCursorBufferPosition([3, 10]);
       expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       expect(bookmarkedRangesForEditor(editor).length).toBe(1);
       expect(callback.callCount).toBe(1);
 
@@ -372,48 +372,48 @@ describe("Bookmarks package", () => {
     it("doesn't die when no bookmarks", () => {
       editor.setCursorBufferPosition([5, 10]);
 
-      atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.notifications.beep.callCount).toBe(1);
+      expect(lumine.notifications.beep.callCount).toBe(1);
 
-      atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.notifications.beep.callCount).toBe(2);
+      expect(lumine.notifications.beep.callCount).toBe(2);
     });
 
     describe("with one bookmark", () => {
       beforeEach(() => {
         editor.setCursorBufferPosition([2, 0]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       });
 
       it("jump-to-next-bookmark jumps to the right place", () => {
         editor.setCursorBufferPosition([0, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
 
         editor.setCursorBufferPosition([5, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
       });
 
       it("jump-to-previous-bookmark jumps to the right place", () => {
         editor.setCursorBufferPosition([0, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
 
         editor.setCursorBufferPosition([5, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
       });
     });
@@ -421,7 +421,7 @@ describe("Bookmarks package", () => {
     describe("with bookmarks", () => {
       beforeEach(() => {
         editor.setCursorBufferPosition([2, 0]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
         editor.setSelectedBufferRanges([
           [
@@ -429,52 +429,52 @@ describe("Bookmarks package", () => {
             [10, 0],
           ],
         ]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
         editor.setCursorBufferPosition([5, 0]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       });
 
       it("jump-to-next-bookmark finds next bookmark", () => {
         editor.setCursorBufferPosition([0, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getMarker().getBufferRange()).toEqual([
           [8, 4],
           [10, 0],
         ]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
 
         editor.setCursorBufferPosition([11, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
       });
 
       it("jump-to-previous-bookmark finds previous bookmark", () => {
         editor.setCursorBufferPosition([0, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getMarker().getBufferRange()).toEqual([
           [8, 4],
           [10, 0],
         ]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getBufferPosition()).toEqual([2, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getMarker().getBufferRange()).toEqual([
           [8, 4],
           [10, 0],
@@ -482,7 +482,7 @@ describe("Bookmarks package", () => {
 
         editor.setCursorBufferPosition([11, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
         expect(editor.getLastCursor().getMarker().getBufferRange()).toEqual([
           [8, 4],
           [10, 0],
@@ -501,7 +501,7 @@ describe("Bookmarks package", () => {
       ]);
       expect(bookmarkedRangesForEditor(editor).length).toBe(0);
 
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       expect(bookmarkedRangesForEditor(editor).length).toBe(1);
     });
 
@@ -510,7 +510,7 @@ describe("Bookmarks package", () => {
       editor.insertText("Hello");
       editor.setCursorBufferPosition([0, 0]);
 
-      atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
       expect(editor.getLastCursor().getMarker().getBufferRange()).toEqual([
         [3, 15],
         [3, 30],
@@ -522,7 +522,7 @@ describe("Bookmarks package", () => {
       editor.insertText("Hello");
       editor.setCursorBufferPosition([0, 0]);
 
-      atom.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
       expect(editor.getLastCursor().getMarker().getBufferRange()).toEqual([
         [3, 10],
         [3, 25],
@@ -533,13 +533,13 @@ describe("Bookmarks package", () => {
   describe("browsing bookmarks", () => {
     it("displays a select list of all bookmarks", async () => {
       editor.setCursorBufferPosition([0]);
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       editor.setCursorBufferPosition([2]);
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       editor.setCursorBufferPosition([4]);
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
-      await atom.commands.dispatch(workspaceElement, "bookmarks:view-all");
+      await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
 
       bookmarks = workspaceElement.querySelectorAll(".bookmark");
       expect(bookmarks.length).toBe(3);
@@ -561,42 +561,42 @@ describe("Bookmarks package", () => {
       let editor2;
 
       beforeEach(async () => {
-        editor2 = await atom.workspace.open("sample.coffee");
+        editor2 = await lumine.workspace.open("sample.coffee");
       });
 
       it("sets the cursor to the location of the bookmark and activates the right editor", async () => {
         editor.setCursorBufferPosition([8]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         editor.setCursorBufferPosition([0]);
 
-        atom.workspace.paneForItem(editor2).activateItem(editor2);
-        await atom.commands.dispatch(workspaceElement, "bookmarks:view-all");
+        lumine.workspace.paneForItem(editor2).activateItem(editor2);
+        await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
 
         const bookmarkElement = workspaceElement.querySelector(".bookmarks-view .bookmark");
 
-        await atom.commands.dispatch(bookmarkElement, "core:confirm");
+        await lumine.commands.dispatch(bookmarkElement, "core:confirm");
 
-        expect(atom.workspace.getActiveTextEditor()).toEqual(editor);
+        expect(lumine.workspace.getActiveTextEditor()).toEqual(editor);
         expect(editor.getCursorBufferPosition()).toEqual([8, 0]);
       });
 
       it("searches for the bookmark among all panes and editors", async () => {
         editor.setCursorBufferPosition([8]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         editor.setCursorBufferPosition([0]);
 
-        atom.workspace.paneForItem(editor2).activateItem(editor2);
-        const pane1 = atom.workspace.getActivePane();
+        lumine.workspace.paneForItem(editor2).activateItem(editor2);
+        const pane1 = lumine.workspace.getActivePane();
         pane1.splitRight();
-        expect(atom.workspace.getActivePane()).not.toEqual(pane1);
+        expect(lumine.workspace.getActivePane()).not.toEqual(pane1);
 
-        await atom.commands.dispatch(workspaceElement, "bookmarks:view-all");
+        await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
 
         const bookmarkElement = workspaceElement.querySelector(".bookmarks-view .bookmark");
 
-        await atom.commands.dispatch(bookmarkElement, "core:confirm");
+        await lumine.commands.dispatch(bookmarkElement, "core:confirm");
 
-        expect(atom.workspace.getActiveTextEditor()).toEqual(editor);
+        expect(lumine.workspace.getActiveTextEditor()).toEqual(editor);
         expect(editor.getCursorBufferPosition()).toEqual([8, 0]);
       });
     });
@@ -606,15 +606,15 @@ describe("Bookmarks package", () => {
     let [editor2, editorElement2] = [];
 
     beforeEach(async () => {
-      editor2 = await atom.workspace.open("sample.coffee");
-      editorElement2 = atom.views.getView(editor2);
+      editor2 = await lumine.workspace.open("sample.coffee");
+      editorElement2 = lumine.views.getView(editor2);
     });
 
     it("restores bookmarks on all the previously open editors", () => {
       editor.setCursorScreenPosition([1, 2]);
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       editor2.setCursorScreenPosition([4, 5]);
-      atom.commands.dispatch(editorElement2, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement2, "bookmarks:toggle-bookmark");
 
       expect(bookmarkedRangesForEditor(editor)).toEqual([
         [
@@ -631,8 +631,8 @@ describe("Bookmarks package", () => {
 
       const state = bookmarks.serialize();
       bookmarks.deactivate();
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
-      atom.commands.dispatch(editorElement2, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement2, "bookmarks:toggle-bookmark");
 
       // toggling the bookmark has no effect when the package is deactivated.
       expect(bookmarkedRangesForEditor(editor)).toEqual([]);
@@ -653,8 +653,8 @@ describe("Bookmarks package", () => {
         ],
       ]);
 
-      atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
-      atom.commands.dispatch(editorElement2, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      lumine.commands.dispatch(editorElement2, "bookmarks:toggle-bookmark");
 
       expect(bookmarkedRangesForEditor(editor)).toEqual([]);
       expect(bookmarkedRangesForEditor(editor2)).toEqual([]);
@@ -665,25 +665,25 @@ describe("Bookmarks package", () => {
     it("doesnt die when no bookmarks", () => {
       editor.setCursorBufferPosition([5, 10]);
 
-      atom.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.notifications.beep.callCount).toBe(1);
+      expect(lumine.notifications.beep.callCount).toBe(1);
 
-      atom.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
+      lumine.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(atom.notifications.beep.callCount).toBe(2);
+      expect(lumine.notifications.beep.callCount).toBe(2);
     });
 
     describe("with one bookmark", () => {
       beforeEach(() => {
         editor.setCursorBufferPosition([2, 0]);
-        atom.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       });
 
       it("select-to-next-bookmark selects to the right place", () => {
         editor.setCursorBufferPosition([0, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
         expect(editor.getSelectedBufferRange()).toEqual([
           [0, 0],
           [2, 0],
@@ -693,7 +693,7 @@ describe("Bookmarks package", () => {
       it("select-to-next-bookmark selects to the only bookmark", () => {
         editor.setCursorBufferPosition([4, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
         expect(editor.getSelectedBufferRange()).toEqual([
           [4, 0],
           [2, 0],
@@ -703,7 +703,7 @@ describe("Bookmarks package", () => {
       it("select-to-previous-bookmark selects to the right place", () => {
         editor.setCursorBufferPosition([4, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
         expect(editor.getSelectedBufferRange()).toEqual([
           [4, 0],
           [2, 0],
@@ -713,7 +713,7 @@ describe("Bookmarks package", () => {
       it("select-to-previous-bookmark selects to the only bookmark", () => {
         editor.setCursorBufferPosition([0, 0]);
 
-        atom.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
         expect(editor.getSelectedBufferRange()).toEqual([
           [0, 0],
           [2, 0],
