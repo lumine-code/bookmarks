@@ -14,7 +14,7 @@ describe("Bookmarks package", () => {
     editorElement.querySelectorAll(".line-number.bookmarked");
 
   beforeEach(async () => {
-    spyOn(window, "setImmediate").andCallFake((fn) => fn());
+    spyOn(window, "setImmediate").and.callFake((fn) => fn());
     workspaceElement = lumine.views.getView(lumine.workspace);
 
     await lumine.workspace.open("sample.js");
@@ -57,11 +57,11 @@ describe("Bookmarks package", () => {
 
         lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(1);
-        expect(callback.callCount).toBe(1);
+        expect(callback.calls.count()).toBe(1);
 
         lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
-        expect(callback.callCount).toBe(2);
+        expect(callback.calls.count()).toBe(2);
       });
     });
 
@@ -338,15 +338,15 @@ describe("Bookmarks package", () => {
 
       editor.setCursorBufferPosition([3, 10]);
       lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
-      expect(callback.callCount).toBe(1);
+      expect(callback.calls.count()).toBe(1);
 
       editor.setCursorBufferPosition([5, 0]);
       lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
-      expect(callback.callCount).toBe(2);
+      expect(callback.calls.count()).toBe(2);
 
       lumine.commands.dispatch(editorElement, "bookmarks:clear-bookmarks");
       expect(getBookmarkedLineNodes(editorElement).length).toBe(0);
-      expect(callback.callCount).toBe(3);
+      expect(callback.calls.count()).toBe(3);
     });
   });
 
@@ -360,11 +360,11 @@ describe("Bookmarks package", () => {
 
       lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       expect(bookmarkedRangesForEditor(editor).length).toBe(1);
-      expect(callback.callCount).toBe(1);
+      expect(callback.calls.count()).toBe(1);
 
       editor.setText("");
       expect(bookmarkedRangesForEditor(editor).length).toBe(0);
-      expect(callback.callCount).toBe(2);
+      expect(callback.calls.count()).toBe(2);
     });
   });
 
@@ -374,11 +374,11 @@ describe("Bookmarks package", () => {
 
       lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.callCount).toBe(1);
+      expect(lumine.notifications.beep.calls.count()).toBe(1);
 
       lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.callCount).toBe(2);
+      expect(lumine.notifications.beep.calls.count()).toBe(2);
     });
 
     describe("with one bookmark", () => {
@@ -667,11 +667,11 @@ describe("Bookmarks package", () => {
 
       lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.callCount).toBe(1);
+      expect(lumine.notifications.beep.calls.count()).toBe(1);
 
       lumine.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.callCount).toBe(2);
+      expect(lumine.notifications.beep.calls.count()).toBe(2);
     });
 
     describe("with one bookmark", () => {
