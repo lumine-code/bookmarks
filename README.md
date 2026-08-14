@@ -11,7 +11,7 @@ Mark lines in the editor and jump back to them.
 
 ## Installation
 
-To install `bookmarks` search for _bookmarks_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/bookmarks`.
+To install `bookmarks` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/bookmarks`.
 
 ## Commands
 
@@ -27,7 +27,7 @@ Commands available in `lumine-workspace`:
 
 ## Services
 
-- **[bookmarks](docs/bookmarks.md)** (`1.0.0`): provided to expose the list of bookmarks to any package that wants to know about them.
+- [`bookmarks`](docs/bookmarks.md): provided to expose the list of bookmarks to any package that wants to know about them.
 
 ## Customization
 
