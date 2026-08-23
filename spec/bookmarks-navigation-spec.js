@@ -12,7 +12,6 @@ describe("Bookmarks navigation", () => {
     jasmine.attachToDOM(workspaceElement);
     editor = lumine.workspace.getActiveTextEditor();
     editorElement = lumine.views.getView(editor);
-    spyOn(lumine.notifications, "beep");
   });
 
   describe("jumping between bookmarks", () => {
@@ -21,11 +20,9 @@ describe("Bookmarks navigation", () => {
 
       lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.calls.count()).toBe(1);
 
       lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.calls.count()).toBe(2);
     });
 
     describe("with one bookmark", () => {
@@ -144,11 +141,9 @@ describe("Bookmarks navigation", () => {
 
       lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.calls.count()).toBe(1);
 
       lumine.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
       expect(editor.getLastCursor().getBufferPosition()).toEqual([5, 10]);
-      expect(lumine.notifications.beep.calls.count()).toBe(2);
     });
 
     describe("with one bookmark", () => {

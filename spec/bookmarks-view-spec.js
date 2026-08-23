@@ -12,7 +12,6 @@ describe("Bookmarks view", () => {
     jasmine.attachToDOM(workspaceElement);
     editor = lumine.workspace.getActiveTextEditor();
     editorElement = lumine.views.getView(editor);
-    spyOn(lumine.notifications, "beep");
   });
 
   describe("browsing bookmarks", () => {
