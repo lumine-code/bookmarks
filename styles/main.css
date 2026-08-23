@@ -1,11 +1,39 @@
 lumine-text-editor {
-  .gutter .line-number.bookmarked .icon-right {
-    visibility: visible;
+  /* Room for the mark, on every row rather than only the bookmarked ones, so
+   * that bookmarking a line does not shift its number. Core leaves 0.5em,
+   * which a two-digit number fills. git-diff reserves the same way. */
+  .gutter .line-number {
+    padding-left: 1.1em;
+  }
 
-    &:before {
-      content: "\f07b";
-      color: #09c;
-    }
+  /* Drawn on the line number itself rather than on its `.icon-right` child.
+   * Core renders exactly one of those per row and uses it as the fold
+   * indicator, matching the click target on class rather than on glyph, so
+   * styling it replaced the fold chevron on a bookmarked foldable line and
+   * turned a click on the bookmark into a fold. Same reasoning as linter's
+   * gutter dot: the gutter is shared, so a decoration takes its own space.
+   *
+   * The mark sits in the padding at the left edge, where the numbers'
+   * right alignment leaves room, and claims no height so it cannot change
+   * the gutter's line height. */
+  .gutter .line-number.bookmarked::before {
+    font-family: "Octicons Regular";
+    font-weight: normal;
+    font-style: normal;
+    content: "\f07b";
+    color: var(--bookmarks-marker-color, #09c);
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    height: 0;
+    width: 0.5em;
+    font-size: 0.75em;
+    line-height: 1;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    /* The fold indicator keeps every click in the gutter. */
+    pointer-events: none;
   }
 }
 
