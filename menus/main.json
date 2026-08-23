@@ -4,15 +4,31 @@
       "label": "Edit",
       "submenu": [
         {
-          "label": "Bookmark",
+          "label": "Toggle Bookmark",
+          "command": "bookmarks:toggle-bookmark"
+        }
+      ]
+    },
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Bookmarks",
           "submenu": [
+            {
+              "label": "Toggle Bookmark",
+              "command": "bookmarks:toggle-bookmark"
+            },
             {
               "label": "View All",
               "command": "bookmarks:view-all"
             },
             {
-              "label": "Toggle Bookmark",
-              "command": "bookmarks:toggle-bookmark"
+              "label": "Clear Bookmarks",
+              "command": "bookmarks:clear-bookmarks"
+            },
+            {
+              "type": "separator"
             },
             {
               "label": "Jump to Next Bookmark",
@@ -21,6 +37,9 @@
             {
               "label": "Jump to Previous Bookmark",
               "command": "bookmarks:jump-to-previous-bookmark"
+            },
+            {
+              "type": "separator"
             },
             {
               "label": "Select to Next Bookmark",
