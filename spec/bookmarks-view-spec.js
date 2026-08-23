@@ -85,4 +85,39 @@ describe("Bookmarks view", () => {
       });
     });
   });
+  describe("filtering the bookmark list", () => {
+    beforeEach(async () => {
+      editor.setCursorBufferPosition([2, 0]);
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      editor.setCursorBufferPosition([6, 0]);
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
+    });
+
+    it("filters on the line number the row shows", async () => {
+      const list = workspaceElement.querySelector(".bookmarks-view");
+      expect(list.querySelectorAll(".bookmark").length).toBe(2);
+      expect(list.querySelector(".primary-line").textContent).toBe("sample.js:3");
+
+      // The filter carried the zero-based row while the row rendered the
+      // one-based one, so the number a user reads matched nothing.
+      list.querySelector("lumine-text-editor[mini]").getModel().setText("sample.js:3");
+      await lumine.views.getNextUpdatePromise();
+
+      expect(list.querySelectorAll(".bookmark").length).toBe(1);
+    });
+
+    it("does nothing when the bookmarked editor has been destroyed", async () => {
+      const list = workspaceElement.querySelector(".bookmarks-view");
+      // The list is built when it opens, so its editor can be gone by the
+      // time a row is confirmed. Confirming used to dereference the pane the
+      // workspace no longer has for it.
+      editor.destroy();
+
+      await lumine.commands.dispatch(list, "core:confirm");
+
+      expect(lumine.workspace.getModalPanels().some((panel) => panel.isVisible())).toBe(false);
+      expect(lumine.workspace.getActivePaneItem()).toBeUndefined();
+    });
+  });
 });

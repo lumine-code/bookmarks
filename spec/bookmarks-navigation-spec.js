@@ -193,4 +193,103 @@ describe("Bookmarks navigation", () => {
       });
     });
   });
+  describe("anchoring on the caret", () => {
+    const bookmarkRows = (rows) => {
+      for (const row of rows) {
+        editor.setCursorBufferPosition([row, 0]);
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      }
+    };
+
+    it("jumps forward from the caret, not from the top of the selection", () => {
+      bookmarkRows([2, 8]);
+      // Caret at the foot of a selection that starts above the first bookmark.
+      editor.setSelectedBufferRange([
+        [1, 0],
+        [5, 0],
+      ]);
+
+      lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+
+      expect(editor.getSelectedBufferRange()).toEqual([
+        [8, 0],
+        [8, 0],
+      ]);
+    });
+
+    it("jumps backward past the bookmark the caret is inside", () => {
+      bookmarkRows([2, 5]);
+      editor.setSelectedBufferRange([
+        [8, 4],
+        [10, 0],
+      ]);
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      editor.setCursorBufferPosition([9, 0]);
+
+      lumine.commands.dispatch(editorElement, "bookmarks:jump-to-previous-bookmark");
+
+      expect(editor.getSelectedBufferRange()).toEqual([
+        [5, 0],
+        [5, 0],
+      ]);
+    });
+
+    it("keeps extending the selection on repeated select-to-next-bookmark", () => {
+      bookmarkRows([2, 5, 8]);
+      editor.setCursorBufferPosition([0, 0]);
+
+      const reached = [];
+      for (let press = 0; press < 3; press++) {
+        lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
+        reached.push(editor.getSelectedBufferRange().serialize());
+      }
+
+      // The second press used to collapse the selection onto the first
+      // bookmark, so it alternated instead of reaching past one.
+      expect(reached).toEqual([
+        [
+          [0, 0],
+          [2, 0],
+        ],
+        [
+          [0, 0],
+          [5, 0],
+        ],
+        [
+          [0, 0],
+          [8, 0],
+        ],
+      ]);
+    });
+
+    it("keeps the selection reversed when selecting to a previous bookmark", () => {
+      bookmarkRows([2, 5]);
+      editor.setCursorBufferPosition([9, 0]);
+
+      lumine.commands.dispatch(editorElement, "bookmarks:select-to-previous-bookmark");
+
+      expect(editor.getSelectedBufferRange()).toEqual([
+        [5, 0],
+        [9, 0],
+      ]);
+      expect(editor.getLastSelection().isReversed()).toBe(true);
+    });
+
+    it("selects to the near edge of a multi-row bookmark", () => {
+      editor.setSelectedBufferRange([
+        [8, 4],
+        [10, 0],
+      ]);
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      editor.setCursorBufferPosition([2, 0]);
+
+      lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
+
+      // The far edge swallowed the bookmark rather than reaching it.
+      expect(editor.getSelectedBufferRange()).toEqual([
+        [2, 0],
+        [8, 4],
+      ]);
+    });
+  });
 });

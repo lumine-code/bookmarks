@@ -405,4 +405,63 @@ describe("Bookmarks", () => {
       ]);
     });
   });
+  describe("housekeeping", () => {
+    it("does not accumulate subscriptions as bookmarks are toggled on and off", () => {
+      const instance = provider.getInstanceForEditor(editor);
+      const subscriptionCount = () => instance.disposables.disposables.size;
+      const before = subscriptionCount();
+
+      for (let cycle = 0; cycle < 25; cycle++) {
+        editor.setCursorBufferPosition([3, 0]);
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      }
+
+      // Each bookmark used to leave its invalidation subscription behind in the
+      // editor-lifetime composite, so this grew by one per bookmark ever made.
+      expect(instance.getAllBookmarks()).toEqual([]);
+      expect(subscriptionCount()).toBe(before);
+    });
+
+    it("bookmarks a row that two cursors share", () => {
+      editor.setCursorBufferPosition([3, 0]);
+      editor.addCursorAtBufferPosition([3, 10]);
+
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+
+      // The second cursor used to find what the first had just created and
+      // destroy it, so a row two cursors shared could not be bookmarked.
+      expect(provider.getBookmarksForEditor(editor).length).toBe(1);
+    });
+
+    it("emits did-change-bookmarks once per toggle however many cursors there are", () => {
+      const callback = jasmine.createSpy();
+      provider.getInstanceForEditor(editor).onDidChangeBookmarks(callback);
+
+      editor.setCursorBufferPosition([1, 0]);
+      editor.addCursorAtBufferPosition([4, 0]);
+      editor.addCursorAtBufferPosition([7, 0]);
+      lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+
+      expect(provider.getBookmarksForEditor(editor).length).toBe(3);
+      expect(callback.calls.count()).toBe(1);
+    });
+
+    it("emits did-change-bookmarks once for an edit that invalidates several", () => {
+      for (const row of [3, 6, 9]) {
+        editor.setCursorBufferPosition([row, 2]);
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+      }
+      const callback = jasmine.createSpy();
+      provider.getInstanceForEditor(editor).onDidChangeBookmarks(callback);
+
+      editor.getBuffer().delete([
+        [2, 0],
+        [11, 0],
+      ]);
+
+      expect(provider.getBookmarksForEditor(editor)).toEqual([]);
+      expect(callback.calls.count()).toBe(1);
+    });
+  });
 });
