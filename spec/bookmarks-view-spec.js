@@ -58,10 +58,12 @@ describe("Bookmarks view", () => {
 
         const bookmarkElement = workspaceElement.querySelector(".bookmarks-view .bookmark");
 
+        const open = spyOn(lumine.workspace, "open").and.callThrough();
         await lumine.commands.dispatch(bookmarkElement, "core:confirm");
 
         expect(lumine.workspace.getActiveTextEditor()).toEqual(editor);
         expect(editor.getCursorBufferPosition()).toEqual([8, 0]);
+        expect(open).toHaveBeenCalledWith(editor, { searchAllPanes: true });
       });
 
       it("searches for the bookmark among all panes and editors", async () => {
