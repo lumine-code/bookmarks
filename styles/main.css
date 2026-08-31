@@ -13,9 +13,10 @@ lumine-text-editor {
    * turned a click on the bookmark into a fold. Same reasoning as linter's
    * gutter dot: the gutter is shared, so a decoration takes its own space.
    *
-   * The mark sits in the padding at the left edge, where the numbers'
-   * right alignment leaves room, and claims no height so it cannot change
-   * the gutter's line height. */
+   * Absolute positioning anchors the mark to the row's left edge and takes it
+   * out of layout, so neither the number's width nor the mark can move the
+   * other. With no vertical inset, its inline static position still follows
+   * the number's baseline. */
   .gutter .line-number.bookmarked::before {
     font-family: "Octicons Regular";
     font-weight: normal;
@@ -24,13 +25,12 @@ lumine-text-editor {
     color: var(--bookmarks-marker-color, #09c);
     display: inline-block;
     position: absolute;
-    left: 0;
-    top: 0.2em;
-    height: 0;
+    left: 0.3em;
     width: 0.5em;
     font-size: 0.75em;
     line-height: 1;
     text-align: center;
+    vertical-align: baseline;
     -webkit-font-smoothing: antialiased;
     /* The fold indicator keeps every click in the gutter. */
     pointer-events: none;

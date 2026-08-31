@@ -62,6 +62,21 @@ describe("Bookmarks", () => {
         expect(bookmarkedRangesForEditor(editor).length).toBe(0);
         expect(callback.calls.count()).toBe(2);
       });
+
+      it("does not shift the line number when the mark appears", () => {
+        const numberLeftForRow = (row) => {
+          const lineNumber = editorElement.querySelector(`.line-number[data-buffer-row="${row}"]`);
+          const range = document.createRange();
+          range.selectNode(lineNumber.firstChild);
+          return range.getBoundingClientRect().left;
+        };
+
+        const numberLeft = numberLeftForRow(3);
+        editor.setCursorBufferPosition([3, 10]);
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+
+        expect(numberLeftForRow(3)).toBe(numberLeft);
+      });
     });
 
     describe("multiple point marker bookmark", () => {

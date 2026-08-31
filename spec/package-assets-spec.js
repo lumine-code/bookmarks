@@ -66,7 +66,7 @@ describe("bookmarks package assets", () => {
 
   // Core renders one .icon-right per line number and uses it as the fold
   // indicator, matching the click target on class rather than on glyph.
-  it("leaves the gutter's fold indicator alone and themes its own colour", () => {
+  it("anchors the mark to the gutter edge and aligns it with the line number", () => {
     const styles = read("styles/main.css");
     // Comments stripped: the block above the rule explains why .icon-right is
     // the thing being avoided, and naming it there is the point.
@@ -74,6 +74,15 @@ describe("bookmarks package assets", () => {
 
     expect(rules).not.toContain(".icon-right");
     expect(rules).toContain("var(--bookmarks-marker-color");
+    // Absolute left fixes the horizontal position independently of the number's
+    // digit count. With no top inset, the inline static position supplies the
+    // vertical baseline without contributing any layout width.
+    expect(rules).toMatch(/padding-left:\s*1\.1em;/);
+    expect(rules).toMatch(/position:\s*absolute;/);
+    expect(rules).toMatch(/left:\s*0\.3em;/);
+    expect(rules).toMatch(/width:\s*0\.5em;/);
+    expect(rules).toMatch(/vertical-align:\s*baseline;/);
+    expect(rules).not.toMatch(/\btop\s*:/);
   });
 
   it("keeps the manifest pointed at lumine-code", () => {
