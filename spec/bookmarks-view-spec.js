@@ -1,6 +1,15 @@
 describe("Bookmarks view", () => {
   let workspaceElement, editorElement, editor;
 
+  function nextAction(list) {
+    return new Promise((resolve) => {
+      const subscription = list.onDidFinishAction((event) => {
+        subscription.dispose();
+        resolve(event);
+      });
+    });
+  }
+
   beforeEach(async () => {
     spyOn(window, "setImmediate").and.callFake((fn) => fn());
     workspaceElement = lumine.views.getView(lumine.workspace);
@@ -27,10 +36,21 @@ describe("Bookmarks view", () => {
 
       const bookmarkNodes = workspaceElement.querySelectorAll(".bookmark");
       expect(bookmarkNodes.length).toBe(3);
+      const list = workspaceElement.querySelector(".bookmarks-view").getModel();
+      expect(list.getActions()).toContain(
+        jasmine.objectContaining({
+          command: "bookmarks:open-bookmark",
+          context: "item",
+          primary: true,
+          disposition: "close",
+        }),
+      );
+      expect(new Set(list.getItems().map((item) => list.getItemId(item))).size).toBe(3);
       expect(bookmarkNodes[0].querySelector(".primary-line").textContent).toBe("sample.js:1");
       expect(bookmarkNodes[0].querySelector(".secondary-line").textContent).toBe(
         "var quicksort = function () {",
       );
+      expect(bookmarkNodes[0].querySelector(".secondary-line").classList).toContain("line-text");
       expect(bookmarkNodes[1].querySelector(".primary-line").textContent).toBe("sample.js:3");
       expect(bookmarkNodes[1].querySelector(".secondary-line").textContent).toBe(
         "if (items.length <= 1) return items;",
@@ -57,9 +77,12 @@ describe("Bookmarks view", () => {
         await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
 
         const bookmarkElement = workspaceElement.querySelector(".bookmarks-view .bookmark");
+        const list = bookmarkElement.closest(".bookmarks-view").getModel();
 
         const open = spyOn(lumine.workspace, "open").and.callThrough();
-        await lumine.commands.dispatch(bookmarkElement, "core:confirm");
+        const action = nextAction(list);
+        lumine.commands.dispatch(bookmarkElement, "core:confirm");
+        expect((await action).status).toBe("success");
 
         expect(lumine.workspace.getActiveTextEditor()).toEqual(editor);
         expect(editor.getCursorBufferPosition()).toEqual([8, 0]);
@@ -79,8 +102,11 @@ describe("Bookmarks view", () => {
         await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
 
         const bookmarkElement = workspaceElement.querySelector(".bookmarks-view .bookmark");
+        const list = bookmarkElement.closest(".bookmarks-view").getModel();
 
-        await lumine.commands.dispatch(bookmarkElement, "core:confirm");
+        const action = nextAction(list);
+        lumine.commands.dispatch(bookmarkElement, "core:confirm");
+        expect((await action).status).toBe("success");
 
         expect(lumine.workspace.getActiveTextEditor()).toEqual(editor);
         expect(editor.getCursorBufferPosition()).toEqual([8, 0]);
@@ -116,7 +142,9 @@ describe("Bookmarks view", () => {
       // workspace no longer has for it.
       editor.destroy();
 
-      await lumine.commands.dispatch(list, "core:confirm");
+      const action = nextAction(list.getModel());
+      lumine.commands.dispatch(list, "core:confirm");
+      expect((await action).status).toBe("success");
 
       expect(lumine.workspace.getModalPanels().some((panel) => panel.isVisible())).toBe(false);
       expect(lumine.workspace.getActivePaneItem()).toBeUndefined();
