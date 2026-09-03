@@ -36,7 +36,7 @@ describe("Bookmarks view", () => {
 
       const bookmarkNodes = workspaceElement.querySelectorAll(".bookmark");
       expect(bookmarkNodes.length).toBe(3);
-      const list = workspaceElement.querySelector(".bookmarks-view").getModel();
+      const list = workspaceElement.querySelector(".bookmarks-view lumine-input-dialog").getModel();
       expect(list.getActions()).toContain(
         jasmine.objectContaining({
           command: "bookmarks:open-bookmark",
@@ -77,7 +77,7 @@ describe("Bookmarks view", () => {
         await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
 
         const bookmarkElement = workspaceElement.querySelector(".bookmarks-view .bookmark");
-        const list = bookmarkElement.closest(".bookmarks-view").getModel();
+        const list = bookmarkElement.closest("lumine-input-dialog").getModel();
 
         const open = spyOn(lumine.workspace, "open").and.callThrough();
         const action = nextAction(list);
@@ -102,7 +102,7 @@ describe("Bookmarks view", () => {
         await lumine.commands.dispatch(workspaceElement, "bookmarks:view-all");
 
         const bookmarkElement = workspaceElement.querySelector(".bookmarks-view .bookmark");
-        const list = bookmarkElement.closest(".bookmarks-view").getModel();
+        const list = bookmarkElement.closest("lumine-input-dialog").getModel();
 
         const action = nextAction(list);
         lumine.commands.dispatch(bookmarkElement, "core:confirm");
@@ -123,7 +123,7 @@ describe("Bookmarks view", () => {
     });
 
     it("filters on the line number the row shows", async () => {
-      const list = workspaceElement.querySelector(".bookmarks-view");
+      const list = workspaceElement.querySelector(".bookmarks-view lumine-input-dialog");
       expect(list.querySelectorAll(".bookmark").length).toBe(2);
       expect(list.querySelector(".primary-line").textContent).toBe("sample.js:3");
 
@@ -136,7 +136,7 @@ describe("Bookmarks view", () => {
     });
 
     it("does nothing when the bookmarked editor has been destroyed", async () => {
-      const list = workspaceElement.querySelector(".bookmarks-view");
+      const list = workspaceElement.querySelector(".bookmarks-view lumine-input-dialog");
       // The list is built when it opens, so its editor can be gone by the
       // time a row is confirmed. Confirming used to dereference the pane the
       // workspace no longer has for it.
