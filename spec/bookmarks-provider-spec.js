@@ -18,8 +18,11 @@ describe("Bookmarks provider", () => {
   it("publishes the service the manifest declares", () => {
     const { providedServices } = require("../package.json");
 
-    expect(Object.keys(providedServices)).toEqual(["bookmarks"]);
+    expect(Object.keys(providedServices)).toEqual(["bookmarks", "background-tips.provider"]);
     expect(providedServices.bookmarks.versions["1.0.0"]).toBe("provideBookmarks");
+    expect(providedServices["background-tips.provider"].versions["1.0.0"]).toBe(
+      "provideBackgroundTips",
+    );
     expect(typeof bookmarks.provideBookmarks).toBe("function");
     expect(bookmarks.provideBookmarks()).toBe(provider);
   });
