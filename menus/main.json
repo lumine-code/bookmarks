@@ -53,19 +53,5 @@
         }
       ]
     }
-  ],
-  "context-menu": {
-    "lumine-text-editor:not([mini])": [
-      {
-        "type": "separator"
-      },
-      {
-        "label": "Toggle Bookmark",
-        "command": "bookmarks:toggle-bookmark"
-      },
-      {
-        "type": "separator"
-      }
-    ]
-  }
+  ]
 }

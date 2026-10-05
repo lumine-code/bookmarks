@@ -58,10 +58,8 @@ describe("bookmarks package assets", () => {
     }
   });
 
-  it("fences the context-menu block with separators at both ends", () => {
-    const block = menus["context-menu"]["lumine-text-editor:not([mini])"];
-    expect(block[0].type).toBe("separator");
-    expect(block[block.length - 1].type).toBe("separator");
+  it("keeps bookmark actions out of the editor context menu", () => {
+    expect(menus["context-menu"]?.["lumine-text-editor:not([mini])"]).toBeUndefined();
   });
 
   // Core renders one .icon-right per line number and uses it as the fold
