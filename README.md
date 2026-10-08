@@ -2,6 +2,8 @@
 
 Mark lines in the editor and jump back to them.
 
+Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/bookmarks`).
+
 ## Features
 
 - **Line bookmarks**: toggle a bookmark on any line and see it highlighted in the gutter.
