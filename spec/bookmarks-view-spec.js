@@ -129,7 +129,7 @@ describe("Bookmarks view", () => {
 
       // The filter carried the zero-based row while the row rendered the
       // one-based one, so the number a user reads matched nothing.
-      list.querySelector("lumine-text-editor[mini]").getModel().setText("sample.js:3");
+      await list.getModel().setQuery("sample.js:3");
       await lumine.views.getNextUpdatePromise();
 
       expect(list.querySelectorAll(".bookmark").length).toBe(1);
