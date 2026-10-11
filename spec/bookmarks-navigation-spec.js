@@ -31,6 +31,28 @@ describe("Bookmarks navigation", () => {
         lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       });
 
+      it("uses the shared zone for jumps and nearest visibility for selection", () => {
+        lumine.config.set("editor.scrollZone", [25]);
+        editor.setCursorBufferPosition([0, 0]);
+        const scrollRequests = [];
+        const subscription = editor.onDidRequestAutoscroll((request) =>
+          scrollRequests.push(request),
+        );
+
+        lumine.commands.dispatch(editorElement, "bookmarks:jump-to-next-bookmark");
+
+        expect(scrollRequests.map((request) => request.options.mode)).toEqual([[25, 25]]);
+        editor.setCursorBufferPosition([0, 0], { autoscroll: false });
+        scrollRequests.length = 0;
+        lumine.commands.dispatch(editorElement, "bookmarks:select-to-next-bookmark");
+        expect(editor.getSelectedBufferRange().serialize()).toEqual([
+          [0, 0],
+          [2, 0],
+        ]);
+        expect(scrollRequests.map((request) => request.options.mode)).toEqual([[0, 100]]);
+        subscription.dispose();
+      });
+
       it("jump-to-next-bookmark jumps to the right place", () => {
         editor.setCursorBufferPosition([0, 0]);
 
