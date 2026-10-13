@@ -1,0 +1,16 @@
+{
+  "title": "bookmarks",
+  "description": "Bookmark important lines while navigating a source file.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "30f610e242d37a12f74d5d7eef97cc7178de7d11",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "Bookmark important lines while navigating a source file.",
+      "width": 1100,
+      "height": 730
+    }
+  ]
+}
