@@ -77,6 +77,19 @@ describe("Bookmarks", () => {
 
         expect(numberLeftForRow(3)).toBe(numberLeft);
       });
+
+      it("centers the mark vertically at different line heights", () => {
+        editor.setCursorBufferPosition([3, 10]);
+        lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
+        const row = editorElement.querySelector('.line-number[data-buffer-row="3"]');
+        for (const height of [21, 32]) {
+          row.style.height = `${height}px`;
+          const mark = getComputedStyle(row, "::before");
+          const offset = new DOMMatrixReadOnly(mark.transform).m42;
+          const center = parseFloat(mark.top) + offset + parseFloat(mark.height) / 2;
+          expect(Math.abs(center - row.getBoundingClientRect().height / 2)).toBeLessThan(0.5);
+        }
+      });
     });
 
     describe("multiple point marker bookmark", () => {

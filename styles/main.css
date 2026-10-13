@@ -15,8 +15,8 @@ lumine-text-editor {
    *
    * Absolute positioning anchors the mark to the row's left edge and takes it
    * out of layout, so neither the number's width nor the mark can move the
-   * other. With no vertical inset, its inline static position still follows
-   * the number's baseline. */
+   * other. Center the smaller glyph in the row's line box instead of relying
+   * on its inline static position, which places it above the line number. */
   .gutter .line-number.bookmarked::before {
     font-family: "Octicons Regular";
     font-weight: normal;
@@ -26,11 +26,12 @@ lumine-text-editor {
     display: inline-block;
     position: absolute;
     left: 0.3em;
+    top: 50%;
+    transform: translateY(-50%);
     width: 0.5em;
     font-size: 0.75em;
     line-height: 1;
     text-align: center;
-    vertical-align: baseline;
     -webkit-font-smoothing: antialiased;
     /* The fold indicator keeps every click in the gutter. */
     pointer-events: none;
