@@ -5,7 +5,9 @@
       "submenu": [
         {
           "label": "Toggle Bookmark",
-          "command": "bookmarks:toggle-bookmark"
+          "command": "bookmarks:toggle-bookmark",
+          "group": "annotations",
+          "order": 10
         }
       ]
     },
@@ -58,15 +60,21 @@
       "submenu": [
         {
           "label": "View All Bookmarks",
-          "command": "bookmarks:view-all"
+          "command": "bookmarks:view-all",
+          "group": "bookmarks",
+          "order": 10
         },
         {
           "label": "Next Bookmark",
-          "command": "bookmarks:jump-to-next-bookmark"
+          "command": "bookmarks:jump-to-next-bookmark",
+          "group": "bookmarks",
+          "order": 20
         },
         {
           "label": "Previous Bookmark",
-          "command": "bookmarks:jump-to-previous-bookmark"
+          "command": "bookmarks:jump-to-previous-bookmark",
+          "group": "bookmarks",
+          "order": 30
         }
       ]
     }
