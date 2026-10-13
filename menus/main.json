@@ -52,6 +52,23 @@
           ]
         }
       ]
+    },
+    {
+      "label": "Search",
+      "submenu": [
+        {
+          "label": "View All Bookmarks",
+          "command": "bookmarks:view-all"
+        },
+        {
+          "label": "Next Bookmark",
+          "command": "bookmarks:jump-to-next-bookmark"
+        },
+        {
+          "label": "Previous Bookmark",
+          "command": "bookmarks:jump-to-previous-bookmark"
+        }
+      ]
     }
   ]
 }
