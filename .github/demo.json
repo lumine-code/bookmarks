@@ -2,9 +2,10 @@
   "title": "bookmarks",
   "description": "Bookmark important lines while navigating a source file.",
   "recordedOn": "2026-10-13",
-  "sourceRevision": "30f610e242d37a12f74d5d7eef97cc7178de7d11",
+  "sourceRevision": "bdb76ab0a7759f4eb902a7bc0aaacea06e65fa11",
   "mode": "normal",
   "fontSettings": "default",
+  "themeSourceRevision": "238acc5a7bb595b91dad9b7ef2d0ddfefef44db4",
   "images": [
     {
       "file": "demo.png",
