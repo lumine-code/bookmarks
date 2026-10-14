@@ -2,8 +2,8 @@
   "title": "bookmarks",
   "description": "Bookmark important lines and navigate between them in the editor.",
   "recordedOn": "2026-10-14",
-  "sourceRevision": "15e9bb954d810cc4d3ae86036336cf2036c859a9",
-  "themeSourceRevision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
+  "sourceRevision": "1e684b8226e6cd5604a0dbe83d7d5f65f5dccb32",
+  "themeSourceRevision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
   "mode": "normal",
   "fontSettings": "default",
   "scenario": "demo.js",
@@ -23,27 +23,27 @@
   "cornerRadius": 10,
   "sources": {
     "editor": {
-      "revision": "b5a8faec3ddaa8afb89b6e46f9e7739baecae91b",
-      "dirty": true,
-      "workingTreeHash": "056fdbeec067f3ed2be83b01f2b7eb42efb19dce777b9b9ef7288c62ff4af80d"
+      "revision": "8be8f86075ad93df038610d82b3ac6d99329957d",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "package": {
-      "revision": "15e9bb954d810cc4d3ae86036336cf2036c859a9",
+      "revision": "1e684b8226e6cd5604a0dbe83d7d5f65f5dccb32",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "bookmarks": {
-      "revision": "15e9bb954d810cc4d3ae86036336cf2036c859a9",
+      "revision": "1e684b8226e6cd5604a0dbe83d7d5f65f5dccb32",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "language-javascript": {
-      "revision": "c6a745ba9ccb455cda2c4a477e2226c2b0c2e226",
+      "revision": "ae2e6968e3a349fb4d09ce53e339a0f8cce903aa",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     },
     "one-theme": {
-      "revision": "14a69683b0e3238e2bc128fbfae3866c1e4ee9c6",
+      "revision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
       "dirty": false,
       "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
     }
@@ -60,7 +60,7 @@
       "label": "Bookmark important lines and navigate between them in the editor.",
       "width": 1100,
       "height": 730,
-      "sha256": "b318fbdf0aa5a7ac2e933889d63b4f6e6587526e568637ce8017d17254859925"
+      "sha256": "477b1e0d41e3924f4fcd50f381538abd3e521ac3902a026282461034f3e1fefc"
     }
   ]
 }
