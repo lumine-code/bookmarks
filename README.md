@@ -33,7 +33,6 @@ Commands available in `.bookmarks-view`:
 
 - `bookmarks:open-bookmark`: activate the bookmarked editor and select its range,
 - `bookmarks:open-selected-with`: choose an opener for a bookmarked local file,
-- `bookmarks:open-selected-pending`: open that file as a pending text editor,
 - `bookmarks:open-selected-external`: open that file in its external application,
 - `bookmarks:show-selected-in-folder`: reveal that file in the system file manager.
 

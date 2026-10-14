@@ -1,14 +1,12 @@
 {
   ".bookmarks-view .select-list": {
     "alt-enter": "bookmarks:open-selected-with",
-    "shift-enter": "bookmarks:open-selected-pending",
     "ctrl-alt-enter": "bookmarks:open-selected-external",
-    "ctrl-shift-enter": "bookmarks:show-selected-in-folder"
+    "alt-shift-enter": "bookmarks:show-selected-in-folder"
   },
   ".bookmarks-view .select-list lumine-text-editor[mini]": {
     "alt-enter": "bookmarks:open-selected-with",
-    "shift-enter": "bookmarks:open-selected-pending",
     "ctrl-alt-enter": "bookmarks:open-selected-external",
-    "ctrl-shift-enter": "bookmarks:show-selected-in-folder"
+    "alt-shift-enter": "bookmarks:show-selected-in-folder"
   }
 }

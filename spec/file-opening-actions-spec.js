@@ -72,22 +72,36 @@ describe("bookmarks file opening actions", () => {
     });
   });
 
-  it("forces a pending text editor on Shift-click when automatic previews are disabled", async () => {
-    lumine.config.set("core.allowPendingPaneItems", false);
-    expect((await click({ shiftKey: true })).status).toBe("success");
-    const opened = pane.getActiveItem();
-    expect(opened.getPath()).toBe(filename);
-    expect(opened).not.toBe(editor);
-    expect(opened.getCursorBufferPosition()).toEqual([1, 0]);
-    expect(pane.getPendingItem()).toBe(opened);
-  });
+  for (const modifiers of [{ shiftKey: true }, { ctrlKey: true, shiftKey: true }]) {
+    it(`selects without opening for ${modifiers.ctrlKey ? "Ctrl+Shift" : "Shift"}-click`, async () => {
+      const list = view.selectList;
+      const selected = list.getItems()[0];
+      await list.selectNone();
+      const open = spyOn(lumine.workspace, "open").and.callThrough();
+      const action = spyOn(list, "runAction").and.callThrough();
+      const event = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        button: 0,
+        ...modifiers,
+      });
+      list.getElement().querySelector('[role="option"]').dispatchEvent(event);
+      await Promise.resolve();
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(list.getSelectedItem()).toBe(selected);
+      expect(action).not.toHaveBeenCalled();
+      expect(open).not.toHaveBeenCalled();
+      expect(view.selectListHost.isVisible()).toBe(true);
+    });
+  }
 
   it("routes the system gestures through the registered external handlers", async () => {
     const open = spyOn(external, "openExternal").and.resolveTo("");
     const show = spyOn(external, "showInFolder").and.resolveTo("");
     expect((await click({ ctrlKey: true, altKey: true })).status).toBe("success");
     await view.show();
-    expect((await click({ ctrlKey: true, shiftKey: true })).status).toBe("success");
+    expect((await click({ altKey: true, shiftKey: true })).status).toBe("success");
     expect(open).toHaveBeenCalledOnceWith(filename);
     expect(show).toHaveBeenCalledOnceWith(filename);
   });
@@ -104,7 +118,7 @@ describe("bookmarks file opening actions", () => {
     const BookmarksView = require("../lib/bookmarks-view");
     view = new BookmarksView([{ editor: unsaved, markerLayer: markers }], window);
     await view.show();
-    expect((await view.selectList.runAction("bookmarks:open-selected-pending")).status).toBe(
+    expect((await view.selectList.runAction("bookmarks:open-selected-with")).status).toBe(
       "unavailable",
     );
     expect((await view.selectList.confirmSelection()).status).toBe("success");
@@ -118,9 +132,8 @@ describe("bookmarks file opening actions", () => {
   it("resolves the shared alternatives in the query editor", () => {
     for (const [keystrokes, command] of [
       ["alt-enter", "bookmarks:open-selected-with"],
-      ["shift-enter", "bookmarks:open-selected-pending"],
       ["ctrl-alt-enter", "bookmarks:open-selected-external"],
-      ["ctrl-shift-enter", "bookmarks:show-selected-in-folder"],
+      ["alt-shift-enter", "bookmarks:show-selected-in-folder"],
     ])
       expect(
         lumine.keymaps.findKeyBindings({
@@ -128,5 +141,11 @@ describe("bookmarks file opening actions", () => {
           keystrokes,
         })[0]?.command,
       ).toBe(command);
+    for (const keystrokes of ["shift-enter", "ctrl-shift-enter"])
+      expect(
+        lumine.keymaps
+          .findKeyBindings({ target: view.selectList.getQueryEditor().getElement(), keystrokes })
+          .some((binding) => binding.command.startsWith("bookmarks:")),
+      ).toBe(false);
   });
 });
