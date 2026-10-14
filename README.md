@@ -11,7 +11,7 @@ Fork of [pulsar-edit/pulsar](https://github.com/pulsar-edit/pulsar) (`packages/b
 - **Range selection**: select the text between the cursor and the surrounding bookmarks.
 - **Bookmark browser**: view all bookmarks across open editors and jump straight to one.
 
-![Bookmark important lines while navigating a source file.](.github/demo.png)
+![Bookmark important lines and navigate between them in the editor.](.github/demo.png)
 
 ## Installation
 
