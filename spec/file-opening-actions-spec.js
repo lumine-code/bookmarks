@@ -52,12 +52,12 @@ describe("bookmarks file opening actions", () => {
     return done;
   }
 
-  it("passes the bookmarked position and captured pane to Open With on Alt-click", async () => {
-    await lumine.packages.deactivatePackage("open-with");
+  it("passes the bookmarked position and captured pane to Launcher on Alt-click", async () => {
+    await lumine.packages.deactivatePackage("launcher");
     const choose = jasmine.createSpy("choose opener");
     leases.add(
       lumine.commands.add("lumine-workspace", {
-        "open-with:toggle": (event) => {
+        "launcher:open": (event) => {
           event.stopPropagation();
           choose(event.detail);
         },
