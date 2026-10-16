@@ -56,4 +56,17 @@ describe("Bookmarks command availability", () => {
     await running;
     expect(lumine.workspace.open).not.toHaveBeenCalled();
   });
+  it("declines the primary action for a stale bookmarked editor", async () => {
+    const View = require("../lib/bookmarks-view");
+    view = new View([]);
+    const marker = editor.markBufferRange([
+      [0, 0],
+      [0, 0],
+    ]);
+    await view.selectList.setItems([{ editor, marker }]);
+    editor.destroy();
+    expect((await view.selectList.getActionAvailability("bookmarks:open-bookmark")).status).toBe(
+      "disabled",
+    );
+  });
 });

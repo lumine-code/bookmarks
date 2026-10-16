@@ -135,18 +135,16 @@ describe("Bookmarks view", () => {
       expect(list.querySelectorAll(".bookmark").length).toBe(1);
     });
 
-    it("does nothing when the bookmarked editor has been destroyed", async () => {
+    it("declines a destroyed bookmarked editor without closing the list", async () => {
       const list = workspaceElement.querySelector(".bookmarks-view lumine-input-dialog");
       // The list is built when it opens, so its editor can be gone by the
       // time a row is confirmed. Confirming used to dereference the pane the
       // workspace no longer has for it.
       editor.destroy();
 
-      const action = nextAction(list.getModel());
-      lumine.commands.dispatch(list, "core:confirm");
-      expect((await action).status).toBe("success");
+      expect((await list.getModel().confirmSelection()).status).toBe("disabled");
 
-      expect(lumine.workspace.getModalPanels().some((panel) => panel.isVisible())).toBe(false);
+      expect(lumine.workspace.getModalPanels().some((panel) => panel.isVisible())).toBe(true);
       expect(lumine.workspace.getActivePaneItem()).toBeUndefined();
     });
   });
