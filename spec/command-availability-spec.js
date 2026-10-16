@@ -1,0 +1,38 @@
+const path = require("node:path");
+const fs = require("node:fs/promises");
+
+describe("Bookmarks command availability", () => {
+  let editor, fragment, view;
+  beforeEach(async () => {
+    jasmine.attachToDOM(lumine.workspace.getElement());
+    await lumine.packages.activatePackage("bookmarks");
+    editor = await lumine.workspace.open();
+  });
+  afterEach(async () => {
+    view?.destroy();
+    fragment?.destroy();
+    editor.destroy();
+    await lumine.packages.deactivatePackage("bookmarks");
+    view = fragment = null;
+  });
+  it("does not advertise an unobserved non-pane editor", () => {
+    fragment = lumine.workspace.buildTextEditor();
+    lumine.workspace.getElement().appendChild(fragment.element);
+    expect(lumine.commands.canDispatch(fragment.element, "bookmarks:toggle-bookmark")).toBe(false);
+    expect(lumine.commands.canDispatch(editor.element, "bookmarks:toggle-bookmark")).toBe(true);
+  });
+  it("describes a saved bookmark without reading the filesystem", () => {
+    const View = require("../lib/bookmarks-view");
+    view = new View([]);
+    const filePath = path.resolve(__dirname, "fixtures", "missing-review-file.txt");
+    spyOn(editor, "getPath").and.returnValue(filePath);
+    const marker = editor.markBufferRange([
+      [0, 0],
+      [0, 0],
+    ]);
+    spyOn(fs, "stat").and.rejectWith(new Error("must not read during presentation"));
+    expect(view.fileTarget({ editor, marker }).path).toBe(filePath);
+    expect(fs.stat).not.toHaveBeenCalled();
+    marker.destroy();
+  });
+});
