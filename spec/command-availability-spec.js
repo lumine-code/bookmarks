@@ -35,4 +35,25 @@ describe("Bookmarks command availability", () => {
     expect(fs.stat).not.toHaveBeenCalled();
     marker.destroy();
   });
+  it("does not open a bookmark whose editor disappears during file validation", async () => {
+    const View = require("../lib/bookmarks-view");
+    view = new View([]);
+    spyOn(editor, "getPath").and.returnValue(__filename);
+    const marker = editor.markBufferRange([
+      [0, 0],
+      [0, 0],
+    ]);
+    let finish;
+    spyOn(fs, "stat").and.returnValue(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    spyOn(lumine.workspace, "open").and.resolveTo();
+    const running = view.performFileAction({ editor, marker }, "external");
+    editor.destroy();
+    finish({ isFile: () => true });
+    await running;
+    expect(lumine.workspace.open).not.toHaveBeenCalled();
+  });
 });
