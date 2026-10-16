@@ -70,9 +70,10 @@ describe("Bookmarks provider", () => {
   });
 
   it("attaches exactly one instance to an editor opened after a deactivate cycle", async () => {
-    const state = bookmarks.serialize();
+    const state = bookmarks.serializeSessionState();
     bookmarks.deactivate();
-    bookmarks.activate(state);
+    bookmarks.restoreSessionState(state);
+    bookmarks.activate();
 
     const reopened = await lumine.workspace.open("sample.coffee");
     const reopenedElement = lumine.views.getView(reopened);

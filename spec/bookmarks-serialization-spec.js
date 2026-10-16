@@ -50,7 +50,7 @@ describe("Bookmarks serialization", () => {
         ],
       ]);
 
-      const state = bookmarks.serialize();
+      const state = bookmarks.serializeSessionState();
       bookmarks.deactivate();
       lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
       lumine.commands.dispatch(editorElement2, "bookmarks:toggle-bookmark");
@@ -59,7 +59,8 @@ describe("Bookmarks serialization", () => {
       expect(bookmarkedRangesForEditor(editor)).toEqual([]);
       expect(bookmarkedRangesForEditor(editor2)).toEqual([]);
 
-      bookmarks.activate(state);
+      bookmarks.restoreSessionState(state);
+      bookmarks.activate();
 
       expect(bookmarkedRangesForEditor(editor)).toEqual([
         [
@@ -85,15 +86,17 @@ describe("Bookmarks serialization", () => {
       editor.setCursorBufferPosition([1, 2]);
       lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
-      const state = bookmarks.serialize();
+      const state = bookmarks.serializeSessionState();
       expect(state[editor.id]).toBeDefined();
 
       bookmarks.deactivate();
-      bookmarks.activate(state);
+      bookmarks.restoreSessionState(state);
+      bookmarks.activate();
 
       // Otherwise a later editor landing on the same id adopts an entry meant
       // for an editor that is gone.
-      expect(state[editor.id]).toBeUndefined();
+      expect(bookmarks.restoredBookmarksByEditorId[editor.id]).toBeUndefined();
+      expect(state[editor.id]).toBeDefined();
     });
   });
 
@@ -106,7 +109,7 @@ describe("Bookmarks serialization", () => {
     beforeEach(() => {
       editor.setCursorBufferPosition([2, 4]);
       lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
-      layerId = bookmarks.serialize()[editor.id].markerLayerId;
+      layerId = bookmarks.serializeSessionState()[editor.id].markerLayerId;
     });
 
     it("writes the bookmark marker layer into the buffer's serialized state", () => {
@@ -137,7 +140,7 @@ describe("Bookmarks serialization", () => {
 
   describe("bookmarks restored from a previous session", () => {
     const restore = () => {
-      const state = bookmarks.serialize();
+      const state = bookmarks.serializeSessionState();
       bookmarks.deactivate();
       return state;
     };
@@ -147,7 +150,8 @@ describe("Bookmarks serialization", () => {
       editor.setCursorBufferPosition([3, 0]);
       lumine.commands.dispatch(editorElement, "bookmarks:toggle-bookmark");
 
-      bookmarks.activate(restore());
+      bookmarks.restoreSessionState(restore());
+      bookmarks.activate();
       expect(bookmarks.bookmarksProvider.getBookmarksForEditor(editor).length).toBe(1);
 
       editor.getBuffer().delete([
@@ -173,7 +177,8 @@ describe("Bookmarks serialization", () => {
         [2, 0],
         [5, 0],
       ]);
-      bookmarks.activate(state);
+      bookmarks.restoreSessionState(state);
+      bookmarks.activate();
 
       expect(bookmarks.bookmarksProvider.getBookmarksForEditor(editor)).toEqual([]);
       expect(bookmarkedRangesForEditor(editor)).toEqual([]);
