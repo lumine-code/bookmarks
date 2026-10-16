@@ -27,6 +27,18 @@ describe("Bookmarks", () => {
     editorElement = lumine.views.getView(editor);
   });
 
+  it("offers editor bookmark operations only on non-mini editors", () => {
+    expect(lumine.commands.canDispatch(workspaceElement, "bookmarks:view-all")).toBe(true);
+    expect(lumine.commands.canDispatch(workspaceElement, "bookmarks:toggle-bookmark")).toBe(false);
+    expect(lumine.commands.canDispatch(editorElement, "bookmarks:toggle-bookmark")).toBe(true);
+    const mini = lumine.workspace.buildTextEditor({ mini: true });
+    workspaceElement.appendChild(mini.getElement());
+    expect(lumine.commands.canDispatch(mini.getElement(), "bookmarks:toggle-bookmark")).toBe(false);
+    mini.destroy();
+    lumine.commands.dispatch(workspaceElement, "bookmarks:toggle-bookmark");
+    expect(provider.getBookmarksForEditor(editor)).toEqual([]);
+  });
+
   describe("toggling bookmarks", () => {
     describe("point marker bookmark", () => {
       it("creates a marker when toggled", () => {
