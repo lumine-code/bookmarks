@@ -21,7 +21,10 @@ To install `bookmarks` search for it in the Install pane of the Lumine settings,
 
 Commands available in `lumine-workspace`:
 
-- `bookmarks:view-all`: view all bookmarks in a searchable list,
+- `bookmarks:view-all`: view all bookmarks in a searchable list.
+
+Commands available in `lumine-text-editor:not([mini])`:
+
 - `bookmarks:toggle-bookmark`: add or remove a bookmark on the current line,
 - `bookmarks:clear-bookmarks`: remove all bookmarks in the editor,
 - `bookmarks:jump-to-next-bookmark`: select the next bookmark,
