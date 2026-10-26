@@ -39,6 +39,10 @@ Commands available in `.bookmarks-view`:
 - `bookmarks:open-selected-external`: open that file in its external application,
 - `bookmarks:show-selected-in-folder`: reveal that file in the system file manager.
 
+## Usage
+
+Very long bookmarked lines use bounded previews around the bookmark column, with ellipses marking omitted display text. The picker filters these previews together with the complete file name and path; opening a bookmark always uses its original source position.
+
 ## Customization
 
 The colour of the mark in the gutter is a custom property. Set it in your `styles.css`:
