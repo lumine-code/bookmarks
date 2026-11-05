@@ -1,7 +1,7 @@
 lumine-text-editor {
   /* Room for the mark, on every row rather than only the bookmarked ones, so
    * that bookmarking a line does not shift its number. Core leaves 0.5em,
-   * which a two-digit number fills. git-diff reserves the same way. */
+   * which a two-digit number fills. git-chunk reserves the same way. */
   .gutter .line-number {
     padding-left: 1.1em;
   }
